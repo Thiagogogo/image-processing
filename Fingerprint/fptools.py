@@ -21,8 +21,7 @@ def averageOrientation(orientations, weights=None, deviation=False):
         return np.average(aligned, weights=weights) % np.pi
 
     
-def anguloCalc(image, w=16, interpolate=True):
-    w = 10
+def anguloCalc(image, w=10):
     if (image.ndim > 2):
         image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
     
@@ -73,10 +72,14 @@ def anguloCalc(image, w=16, interpolate=True):
 
     return O,Mag
 
-def OrietationFigure(img,D,Mag = -1):
-    n_row,n_col,_ = img.shape
-    jan_tam = 10
-    if (Mag.ndim == 2):
+def OrietationFigure(img,D,w = 10, Mag = np.ones([1])):
+    jan_tam = w
+    if (img.ndim == 3):
+        n_row,n_col,_ = img.shape
+    else:
+        n_row,n_col = img.shape
+
+    if (Mag.ndim < 2):
         Mag = 10*np.ones([int(n_row/jan_tam),int(n_col/jan_tam)])
     for c in range(int(n_col/jan_tam)):
         for r in range(int(n_row/jan_tam)):
