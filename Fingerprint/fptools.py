@@ -2,8 +2,6 @@
 
 import cv2
 import numpy as np
-import math
-from matplotlib import pyplot as plt
 
 
 def averageOrientation(orientations, weights=None, deviation=False):
@@ -25,7 +23,11 @@ def averageOrientation(orientations, weights=None, deviation=False):
     
 def anguloCalc(image, w=16, interpolate=True):
     w = 10
+    if (image.ndim > 2):
+        image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+    
     height, width = image.shape
+    
 
     sobelKernelX = np.array([[-1,  0,  1],[-2,  0,  2],[-1,  0,  1]])
     sobelKernelY = np.array([[-1, -2, -1],[ 0,  0,  0],[ 1,  2,  1]])
@@ -74,14 +76,14 @@ def anguloCalc(image, w=16, interpolate=True):
 def OrietationFigure(img,D,Mag = -1):
     n_row,n_col,_ = img.shape
     jan_tam = 10
-    if (Mag == -1):
+    if (Mag.ndim == 2):
         Mag = 10*np.ones([int(n_row/jan_tam),int(n_col/jan_tam)])
     for c in range(int(n_col/jan_tam)):
         for r in range(int(n_row/jan_tam)):
             r0 = int(r*jan_tam + jan_tam/2)
             c0 = int(c*jan_tam + jan_tam/2)
-            r1 = r0 + int(Mag[r,c]*math.sin(D[r,c]))
-            c1 = c0 + int(Mag[r,c]*math.cos(D[r,c]))
+            r1 = r0 + int(Mag[r,c]*np.sin(D[r,c]))
+            c1 = c0 + int(Mag[r,c]*np.cos(D[r,c]))
             cv2.line(img, (c0,r0),(c1 ,r1),(255,0,0),1) 
     return img
 
